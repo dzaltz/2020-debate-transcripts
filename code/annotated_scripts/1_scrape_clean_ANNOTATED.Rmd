@@ -175,7 +175,20 @@ should be 00:00. Add that manually.
 transcript_VP1$time[1] <- lubridate::ms("00:00")
 head(transcript_VP1)
 ```
+
+**UPDATE:** The rogue apostrophe disaster. Yikes. This was a tough one. After initially
+cleaning the data and starting to run some descriptive analyses I was having a hard time
+replacing all contractions (I'm, you're, etc.) with full words (I am, you are, etc). I
+couldn't figure out why until, finally, I realized that the apostrophes from the transcript
+are different than the apostrophes that are recognized by `textclean::replace_contraction()`.
+
+
+```{r}
+transcript_VP1 <- transcript_VP1 %>% 
+  mutate(transcript = str_replace_all(transcript, "’", "'"))
+```
   
+
 
 ## Presidential Debate 9/29/2020
 This follows a similar process as above and as such I have not included as much commentary.
@@ -242,14 +255,9 @@ head(transcript_P1)
 ```
   
 
-
-# Next steps
-The data is now clean and ready for analysis. I have put a .csv of these data in `\data\clean`
+**UPDATE:** Apostrophe-aclypse 2020 averted. See above for explanation.
+```{r}
+transcript_P1 <- transcript_P1 %>% 
+  mutate(transcript = str_replace_all(transcript, "’", "'"))
+```
   
-A few ideas for descriptive analysis:
-  
-1. Total time spoken (calculate time per line using timestamps)
-2. Total times interrupted (search for strings at end of lines that suggest this...no period?)
-3. Most common words used
-4. Sentiment analysis via `syuzhet` package?
-5. Plot these by speaker/time?
